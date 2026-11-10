@@ -16,4 +16,9 @@ Sistema de agendamento online para barbearia.
 - JavaScript
 
 ## Autor
-Seu nome
+Henrique Cordeiro
+
+## Melhorias futuras
+- Controle de horários ocupados.
+- Integração com banco de dados.
+- Confirmação por WhatsApp.

@@ -1,0 +1,256 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barber Style - Agendamento</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #111;
+    color: white;
+    min-height: 100vh;
+    padding: 30px 15px;
+}
+
+.container {
+    max-width: 500px;
+    margin: auto;
+    background: #1c1c1c;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px #000;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    color: #d4a44c;
+    font-size: 30px;
+}
+
+header p {
+    color: #aaa;
+    margin-top: 8px;
+}
+
+h2 {
+    font-size: 17px;
+    margin: 22px 0 12px;
+}
+
+.opcoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.opcao {
+    flex: 1;
+    min-width: 120px;
+    padding: 13px;
+    border: 1px solid #555;
+    border-radius: 8px;
+    background: #292929;
+    color: white;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.opcao:hover {
+    border-color: #d4a44c;
+}
+
+.opcao.selecionado {
+    background: #d4a44c;
+    color: #111;
+    border-color: #d4a44c;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 13px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background: #292929;
+    color: white;
+    margin-bottom: 10px;
+}
+
+button.confirmar {
+    width: 100%;
+    padding: 16px;
+    background: #d4a44c;
+    color: #111;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 25px;
+}
+
+button.confirmar:hover {
+    background: #f0bd65;
+}
+
+#mensagem {
+    display: none;
+    margin-top: 20px;
+    padding: 15px;
+    background: #244d32;
+    border-radius: 8px;
+    color: white;
+    line-height: 1.6;
+}
+
+footer {
+    text-align: center;
+    color: #777;
+    margin-top: 25px;
+    font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+    <h1>✂ BARBER STYLE</h1>
+    <p>Seu estilo começa aqui!</p>
+</header>
+
+<h2>1. Escolha o serviço</h2>
+<div class="opcoes" id="servicos">
+    <button class="opcao" data-value="Corte de cabelo - R$ 40">
+        Corte<br>R$ 40
+    </button>
+    <button class="opcao" data-value="Barba - R$ 25">
+        Barba<br>R$ 25
+    </button>
+    <button class="opcao" data-value="Corte + Barba - R$ 60">
+        Corte + Barba<br>R$ 60
+    </button>
+</div>
+
+<h2>2. Escolha o barbeiro</h2>
+<div class="opcoes" id="barbeiros">
+    <button class="opcao" data-value="Carlos">Carlos</button>
+    <button class="opcao" data-value="Rafael">Rafael</button>
+    <button class="opcao" data-value="Lucas">Lucas</button>
+</div>
+
+<h2>3. Escolha a data</h2>
+<input type="date" id="data">
+
+<h2>4. Escolha o horário</h2>
+<div class="opcoes" id="horarios">
+    <button class="opcao" data-value="09:00">09:00</button>
+    <button class="opcao" data-value="10:00">10:00</button>
+    <button class="opcao" data-value="11:00">11:00</button>
+    <button class="opcao" data-value="13:00">13:00</button>
+    <button class="opcao" data-value="14:00">14:00</button>
+    <button class="opcao" data-value="15:00">15:00</button>
+    <button class="opcao" data-value="16:00">16:00</button>
+    <button class="opcao" data-value="17:00">17:00</button>
+</div>
+
+<h2>5. Seus dados</h2>
+<input type="text" id="nome" placeholder="Seu nome completo">
+<input type="tel" id="telefone" placeholder="Seu telefone">
+
+<button class="confirmar" onclick="agendar()">
+    CONFIRMAR AGENDAMENTO
+</button>
+
+<div id="mensagem"></div>
+
+<footer>
+    © 2026 Barber Style - Todos os direitos reservados
+</footer>
+
+</div>
+
+<script>
+let servico = "";
+let barbeiro = "";
+let horario = "";
+
+function selecionar(grupo, callback) {
+    document.querySelectorAll("#" + grupo + " .opcao")
+    .forEach(botao => {
+        botao.addEventListener("click", function() {
+            document.querySelectorAll("#" + grupo + " .opcao")
+            .forEach(b => b.classList.remove("selecionado"));
+
+            this.classList.add("selecionado");
+            callback(this.dataset.value);
+        });
+    });
+}
+
+selecionar("servicos", valor => servico = valor);
+selecionar("barbeiros", valor => barbeiro = valor);
+selecionar("horarios", valor => horario = valor);
+
+const dataInput = document.getElementById("data");
+const hoje = new Date();
+const dataLocal = new Date(
+    hoje.getTime() - hoje.getTimezoneOffset() * 60000
+).toISOString().split("T")[0];
+
+dataInput.min = dataLocal;
+
+function agendar() {
+    const nome = document.getElementById("nome").value.trim();
+    const telefone = document.getElementById("telefone").value.trim();
+    const data = dataInput.value;
+
+    if (!servico || !barbeiro || !horario ||
+        !data || !nome || !telefone) {
+        alert("Por favor, preencha todos os campos!");
+        return;
+    }
+
+    if (data < dataLocal) {
+        alert("Escolha uma data válida!");
+        return;
+    }
+
+    const [ano, mes, dia] = data.split("-");
+
+    const mensagem = document.getElementById("mensagem");
+
+    mensagem.style.display = "block";
+    mensagem.innerHTML = `
+        <h3>✓ Agendamento realizado!</h3>
+        <p><strong>Cliente:</strong> ${nome}</p>
+        <p><strong>Telefone:</strong> ${telefone}</p>
+        <p><strong>Serviço:</strong> ${servico}</p>
+        <p><strong>Barbeiro:</strong> ${barbeiro}</p>
+        <p><strong>Data:</strong> ${dia}/${mes}/${ano}</p>
+        <p><strong>Horário:</strong> ${horario}</p>
+        <br>
+        <p>Obrigado por escolher a Barber Style!</p>
+    `;
+
+    mensagem.scrollIntoView({behavior: "smooth"});
+}
+</script>
+
+</body>
+</html>

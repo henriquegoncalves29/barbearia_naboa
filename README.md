@@ -17,3 +17,8 @@ Sistema de agendamento online para barbearia.
 
 ## Autor
 Seu nome
+
+## Melhorias futuras
+- Controle de horários ocupados.
+- Integração com banco de dados.
+- Confirmação por WhatsApp.
